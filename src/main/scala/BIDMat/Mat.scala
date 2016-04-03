@@ -826,7 +826,10 @@ object Mat {
     if (useMKL) {
     	try {
     	  if (ostype == OS_WINDOWS) edu.berkeley.bid.LibUtils.loadLib("libiomp5md")
-    		edu.berkeley.bid.LibUtils.loadLibrary("bidmatcpu")
+	  if (ostype == OS_OSX) {
+		edu.berkeley.bid.LibUtils.loadLib("iomp5")
+	  }
+    	  edu.berkeley.bid.LibUtils.loadLibrary("bidmatcpu")
     	} catch {
     	case th:Throwable => {
     		println("Cant find native CPU libraries")

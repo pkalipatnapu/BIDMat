@@ -147,6 +147,12 @@ public final class LibUtils
         String resourceName = "/lib/" + fullName + "." + libExtension;
         InputStream inputStream = 
             LibUtils.class.getResourceAsStream(resourceName);
+
+	// Change working directory to temp directory for easier loading of resources.
+	String user_dir = System.getProperty("user.dir");
+	System.setProperty("user.dir", System.getProperty("java.io.tmpdir"));
+	System.out.println(System.getProperty("java.library.path"));
+
         if (inputStream == null)
         {
             throw new NullPointerException(
@@ -180,6 +186,7 @@ public final class LibUtils
                 outputStream.close();
             }
         }
+	System.setProperty("user.dir", user_dir);
     }
 
     
