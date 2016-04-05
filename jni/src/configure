@@ -109,7 +109,8 @@ if [ "$OS" = "apple" ] ; then
             $BLAS_ROOT/lib/libmkl_core.a \
             $BLAS_ROOT/lib/libmkl_intel${PTYPE}.a $BLAS_ROOT/lib/libmkl_intel_thread.a \
             $BLAS_ROOT/lib/libmkl_core.a \
-            -liomp5 -lpthread -lm  -framework JavaVM"
+            ${BIDMAT_ROOT}/lib/libiomp5.a \
+            -lpthread -lm  -framework JavaVM"
     fi
     INSTALL_DIR="${BIDMAT_ROOT}/lib"
     CUDA_LIBS="-L${CUDA_HOME}/lib -L${INSTALL_DIR} -lcudart -lcublas"
@@ -164,7 +165,8 @@ elif [ "$OS" = "linux" ] ; then
 	CUDA_LIBS="-L${CUDA_HOME}/${CULIB} -L${INSTALL_DIR} -lcudart -lcublas"
 else
 	BLAS_ROOT="/opt/intel/mkl"
-    RANDSRC="VSL"
+	GCC_VERSION="4.8"  # needed for include path to bits/c++config.h on ubuntu
+	RANDSRC="VSL"
 	if [ "$JAVA_HOME" = "" ]; then
 	    JAVA_HOME="/usr/java/default"
 	fi
@@ -181,7 +183,7 @@ else
           --machine ${MBITS}  -Xcompiler \"-fPIC -c -O2 -g -DNDEBUG\""
 	OBJ="o"
 	OUTFLG="-o "
-	CPPFLAGS="-fPIC -c -O2 -DNDEBUG -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -I$BIDMAT_ROOT/jni/include -I$CUDA_HOME/include" 
+	CPPFLAGS="-fPIC -c -O2 -DNDEBUG -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -I$BIDMAT_ROOT/jni/include -I$CUDA_HOME/include -I/usr/include/x86_64-linux-gnu/c++/$GCC_VERSION"
 	CFLAGS="-openmp -fPIC -c -O2 -DNDEBUG -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -I$BIDMAT_ROOT/jni/include -I$BLAS_ROOT/include -I$BLAS_ROOT/include/${ARCHD}${SUBDIR}"
 	LB="ar rc"    
 	GLD="g++ -shared"
