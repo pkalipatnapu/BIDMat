@@ -172,6 +172,37 @@ public final class LibUtils
                 sw.toString());
         }
     }
+
+    // Moves a file from 
+    public static void unpackLibrary(String baseName) { 
+	String libName = LibUtils.createLibName(baseName);
+	LibUtils.unpackLib(libName);
+    }
+    public static void unpackLib(String libName) { 
+        String libPrefix = createLibPrefix();
+        String libExtension = createLibExtension();
+        String fullName = libPrefix + libName;
+        String resourceName = getResourceName(fullName + "." + libExtension);
+        File externalLib = new File("./lib/" + fullName + "." + libExtension);
+	if (externalLib.exists()) return;
+        try {
+          loadLibFromFile(resourceName, externalLib);
+        }
+        catch (Throwable t) {
+	    StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            
+            pw.println("Error while unpacking native library \"" +
+                    libName + "\"");
+            
+                pw.println(
+                    "Stack trace from the attempt to " +
+                    "load the library as a resource:");
+                t.printStackTrace(pw);
+            pw.flush();
+            pw.close();
+        }
+    }
     
     public static String getResourceName(String libName) {
     	return "/lib/" + libName;

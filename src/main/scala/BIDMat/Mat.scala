@@ -840,6 +840,7 @@ object Mat {
     useSTLRand = useMKL & !useMKLRand;
     try {
 //      jcuda.LibUtils.loadLibrary("jhdf5")
+      edu.berkeley.bid.LibUtils.unpackLib("jhdf5");
       System.loadLibrary("jhdf5")
     } catch {
     case _:Throwable => {
@@ -881,6 +882,7 @@ object Mat {
   			}
   			if (hasCUDA >= 0) {
   				try {
+					edu.berkeley.bid.LibUtils.unpackLibrary("JCudaRuntime");
   					jcuda.LibUtils.loadLibrary("JCudaRuntime");
   				} catch {
   				case y:Throwable =>  {
